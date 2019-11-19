@@ -6,7 +6,6 @@ import collections
 import os
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import cv2
 
 import chainer
 from chainer import serializers, cuda, Variable, optimizers, Link, Chain, ChainList
@@ -201,19 +200,6 @@ for i in range(N_test):
     Activations_pool3.append(Activations['pool3'].reshape(2432))
     Activations_fc1.append(Activations['fc1'].reshape(2863))
     
-    # if y_batch == 0:
-    #     print('True label is Diff.')
-    #     if acc.data == 1.0:
-    #         print('Predicted label is correct.')
-    #     elif acc.data == 0.0:
-    #         print('Predicted label is wrong.')
-    # elif y_batch == 1:
-    #     print('True label is NDiff.')
-    #     if acc.data == 1.0:
-    #         print('Predicted label is correct.')
-    #     elif acc.data == 0.0:
-    #         print('Predicted label is wrong.')
-
 
 acts_conv3 = np.array(Activations_conv3)
 acts_pool3 = np.array(Activations_pool3)

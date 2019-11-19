@@ -224,7 +224,10 @@ with open('results/test.txt', 'w') as f:
     accuracy = (tp + tn) / (tp + tn + fp + fn)
     recall = tp / (tp + fn)
     precision = tp / (tp + fp)
-    fscore = 2 * recall * precision / (recall + precision)
+    try:
+        fscore = 2 * recall * precision / (recall + precision)
+    except:
+        fscore = 0.0
     print('test accuracy  : {}'.format(accuracy))
     print('test recall    : {}'.format(recall))
     print('test precision : {}'.format(precision))
