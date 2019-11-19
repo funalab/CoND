@@ -8,6 +8,7 @@ from chainer import cuda, Variable, optimizers
 import chainer.functions as F
 import chainer.links as L
 from chainer import Link, Chain, ChainList
+from chainer import serializers
 import sys
 import csv
 import time
@@ -16,7 +17,7 @@ import math as mt
 import skimage.io as sk
 import argparse
 import copy
-from chainer import serializers
+import collections
 
 os.environ['QT_QPA_PLATFORM']='offscreen'
 plt.style.use('ggplot')
@@ -172,45 +173,110 @@ p3_s = 3
 f_units = 2863
 dropout = 0.799
 
+# class diff_nn(Chain):
+#     def __init__(self, k1_s=k1_s, f1_s=f1_s, p1_s=p1_s, k2_s=k2_s, f2_s=f2_s, p2_s=p2_s, k3_s=k3_s, f3_s=f3_s, p3_s=p3_s,f_units=f_units, dropout=dropout, batchsize=batchsize, epoch_num=epoch_num):
+#         self.k1_s = k1_s
+#         self.f1_s = f1_s
+#         self.p1_s = p1_s
+#         self.k2_s = k2_s
+#         self.f2_s = f2_s
+#         self.p2_s = p2_s
+#         self.k3_s = k3_s
+#         self.f3_s = f3_s
+#         self.p3_s = p3_s
+#         self.f_units = f_units
+#         self.dropout = dropout
+#         self.batchsize = batchsize
+#         self.epoch_num = epoch_num
+#         self.initializer = chainer.initializers.HeNormal()
+
+#         super(diff_nn, self).__init__(
+#             c1=L.Convolution2D(1, self.f1_s, self.k1_s, initialW=self.initializer, initial_bias=None),
+#             c2=L.Convolution2D(self.f1_s, self.f2_s, self.k2_s, initialW=self.initializer, initial_bias=None),
+#             c3=L.Convolution2D(self.f2_s, self.f3_s, self.k3_s, initialW=self.initializer, initial_bias=None),
+#             bnc1=L.BatchNormalization(self.f1_s),
+#             bnc2=L.BatchNormalization(self.f2_s),
+#             bnc3=L.BatchNormalization(self.f3_s),
+#             l1 = L.Linear(None, self.f_units),
+#             l2 = L.Linear(self.f_units, 2),
+#             )
+#     def _calc(self, x, train):
+#          h = F.max_pooling_2d(F.relu(self.bnc1(self.c1(x))), ksize = self.p1_s, stride = self.p1_s)
+#          h = F.max_pooling_2d(F.relu(self.bnc2(self.c2(h))), ksize = self.p2_s, stride = self.p2_s)
+#          h = F.max_pooling_2d(F.relu(self.bnc3(self.c3(h))), ksize = self.p3_s, stride = self.p3_s)
+#          h = F.relu(self.l1(h))
+#          with chainer.using_config('train', train):
+#              h = F.dropout(h, ratio=self.dropout)
+#          h = self.l2(h)
+#          return h
+#     def __call__(self, x, y, train=True):
+#         x, y = Variable(x), Variable(y)
+#         h = self._calc(x, train)
+#         loss = F.softmax_cross_entropy(h, y)
+#         acc = F.accuracy(h, y)
+#         del h
+#         return loss, acc
+
+def max_pooling1(x):
+    return F.max_pooling_2d(x, ksize=p1_s, stride=p1_s)
+
+def max_pooling2(x):
+    return F.max_pooling_2d(x, ksize=p2_s, stride=p2_s)
+
+def max_pooling3(x):
+    return F.max_pooling_2d(x, ksize=p3_s, stride=p3_s)
+
+def Dropout(x):
+    return F.dropout(x, ratio=dropout)
+
 class diff_nn(Chain):
-    def __init__(self, k1_s=k1_s, f1_s=f1_s, p1_s=p1_s, k2_s=k2_s, f2_s=f2_s, p2_s=p2_s, k3_s=k3_s, f3_s=f3_s, p3_s=p3_s,f_units=f_units, dropout=dropout, batchsize=batchsize, epoch_num=epoch_num):
+    def __init__(self, k1_s=k1_s, f1_s=f1_s, k2_s=k2_s, f2_s=f2_s, k3_s=k3_s, f3_s=f3_s, f_units=f_units):
         self.k1_s = k1_s
         self.f1_s = f1_s
-        self.p1_s = p1_s
         self.k2_s = k2_s
         self.f2_s = f2_s
-        self.p2_s = p2_s
         self.k3_s = k3_s
         self.f3_s = f3_s
-        self.p3_s = p3_s
         self.f_units = f_units
-        self.dropout = dropout
-        self.batchsize = batchsize
-        self.epoch_num = epoch_num
         self.initializer = chainer.initializers.HeNormal()
-
+        self.size = imsize
+        
         super(diff_nn, self).__init__(
-            c1=L.Convolution2D(1, self.f1_s, self.k1_s, initialW=self.initializer, initial_bias=None),
-            c2=L.Convolution2D(self.f1_s, self.f2_s, self.k2_s, initialW=self.initializer, initial_bias=None),
-            c3=L.Convolution2D(self.f2_s, self.f3_s, self.k3_s, initialW=self.initializer, initial_bias=None),
-            bnc1=L.BatchNormalization(self.f1_s),
-            bnc2=L.BatchNormalization(self.f2_s),
-            bnc3=L.BatchNormalization(self.f3_s),
-            l1 = L.Linear(None, self.f_units),
-            l2 = L.Linear(self.f_units, 2),
-            )
-    def _calc(self, x, train):
-         h = F.max_pooling_2d(F.relu(self.bnc1(self.c1(x))), ksize = self.p1_s, stride = self.p1_s)
-         h = F.max_pooling_2d(F.relu(self.bnc2(self.c2(h))), ksize = self.p2_s, stride = self.p2_s)
-         h = F.max_pooling_2d(F.relu(self.bnc3(self.c3(h))), ksize = self.p3_s, stride = self.p3_s)
-         h = F.relu(self.l1(h))
-         with chainer.using_config('train', train):
-             h = F.dropout(h, ratio=self.dropout)
-         h = self.l2(h)
-         return h
+                                      conv1=L.Convolution2D(1, self.f1_s, self.k1_s, initialW=self.initializer, initial_bias=None),
+                                      conv2=L.Convolution2D(self.f1_s, self.f2_s, self.k2_s, initialW=self.initializer, initial_bias=None),
+                                      conv3=L.Convolution2D(self.f2_s, self.f3_s, self.k3_s, initialW=self.initializer, initial_bias=None),
+                                      bn1=L.BatchNormalization(self.f1_s),
+                                      bn2=L.BatchNormalization(self.f2_s),
+                                      bn3=L.BatchNormalization(self.f3_s),
+                                      fc1 = L.Linear(None, self.f_units),
+                                      fc2 = L.Linear(self.f_units, 2),
+                                      )
+        self.functions = collections.OrderedDict([
+                                                  ('conv1', [self.conv1, self.bn1, F.relu]),
+                                                  ('pool1', [max_pooling1]),
+                                                  ('conv2', [self.conv2, self.bn2, F.relu]),
+                                                  ('pool2', [max_pooling2]),
+                                                  ('conv3', [self.conv3, self.bn3, F.relu]),
+                                                  ('pool3', [max_pooling3]),
+                                                  ('fc1', [self.fc1, F.relu, Dropout]),
+                                                  ('fc2', [self.fc2]),
+                                                  ('prob', [F.softmax]),
+                                                  ])
+    
+    def calc(self, x, train):
+        h = max_pooling1(F.relu(self.bn1(self.conv1(x))))
+        h = max_pooling2(F.relu(self.bn2(self.conv2(h))))
+        h = max_pooling3(F.relu(self.bn3(self.conv3(h))))
+        h = F.relu(self.fc1(h))
+        with chainer.using_config('train', train):
+            h = Dropout(h)
+        h = self.fc2(h)
+        return h
+
     def __call__(self, x, y, train=True):
         x, y = Variable(x), Variable(y)
-        h = self._calc(x, train)
+        h = self.calc(x, train)
+        output = F.softmax(h)
         loss = F.softmax_cross_entropy(h, y)
         acc = F.accuracy(h, y)
         del h
