@@ -23,7 +23,7 @@ plt.style.use('ggplot')
 
 starttime = time.time()
 ap = argparse.ArgumentParser(description='python train.py')
-ap.add_argument('--indir', '-i', nargs='?', default='dataset', help='Specify input directory')
+ap.add_argument('--input', '-i', nargs='?', default='dataset', help='Specify input directory')
 ap.add_argument('--gpu', '-g', type=int, default=-1, help='Specify GPU ID (negative value indicates CPU)')
 ap.add_argument('--crop_size', '-c', type=int, default=180, help='Specify crop size (int)')
 ap.add_argument('--preprocess', '-p', type=int, default=1, help='Specify pre-process mode; 1. median, 2. normalization')
@@ -40,7 +40,7 @@ draw = True
 ans = False
 print('[Training property]')
 print('batchsize  : ' + str(batchsize))
-print('epoch      : ' + str(epoch))
+print('epoch      : ' + str(epoch_num))
 print('image size : ' + str(imsize))
 print('crop size  : ' + str(args.crop_size))
 print('pad size   : ' + str(pd_size))
@@ -111,10 +111,10 @@ def image_preprocess(
 
 
 images = {}
-images["diff_train"] = loadImages(args.indir + "/diff/train")
-images["ndiff_train"] = loadImages(args.indir + "/ndiff/train")
-images["diff_test"] = loadImages(args.indir + "/diff/test")
-images["ndiff_test"] = loadImages(args.indir + "/ndiff/test")
+images["diff_train"] = loadImages(args.input + "/diff/train")
+images["ndiff_train"] = loadImages(args.input + "/ndiff/train")
+images["diff_test"] = loadImages(args.input + "/diff/test")
+images["ndiff_test"] = loadImages(args.input + "/ndiff/test")
 
 images["diff_train"] = images["diff_train"].astype('float32')
 images["ndiff_train"] = images["ndiff_train"].astype('float32')
@@ -421,16 +421,6 @@ if draw:
     plt.title("Accuracy")
     plt.plot()
     figname = 'Accuracy_' + str(epoch_num) + '.pdf'
-    plt.savefig(os.path.join('results', figname))
-
-    # draw loss
-    plt.figure(figsize=(8,6))
-    plt.plot(range(len(train_loss)), train_loss)
-    plt.plot(range(len(test_loss)), test_loss)
-    plt.legend(["train_loss","test_loss"],loc=4)
-    plt.title("Loss")
-    plt.plot()
-    figname = 'Loss_' + str(epoch_num) + '.pdf'
     plt.savefig(os.path.join('results', figname))
 
     # draw error rate
