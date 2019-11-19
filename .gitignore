@@ -6,7 +6,9 @@
 results*
 models*
 dataset
+dataset.zip
 best_model.npz
+
 
 #Python
 *.pyc

@@ -74,6 +74,7 @@ The operating environment can be constructed using virtualenv as follows.
 Train code with dataset fold0 in cross validation.
 
 ```sh
+% cd <path/to/CoND>
 % python train.py --input dataset/cross_validation/fold0 --crop_size 200 --preprocess 1 --batchsize 2 --epoch 100 [--gpu gpu]
 ```
 
