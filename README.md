@@ -69,9 +69,12 @@ The operating environment can be constructed using virtualenv as follows.
    % python tSNE.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
    ```
 
+   We used [PredictMovingDirection](https://github.com/funalab/PredictMovingDirection) repository code for GBP and DTD feature analysis.
+
+
 ## How to train
 
-Train code with dataset fold0 in cross validation.
+Train code with dataset `dataset/cross_validation/fold0` in cross validation.
 
 ```sh
 % cd <path/to/CoND>
