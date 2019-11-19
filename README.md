@@ -51,30 +51,30 @@ The operating environment can be constructed using virtualenv as follows.
 
 2. Inference for test dataset.
 
-  データセットの `dataset/cross_validation/fold2` を用いた学習で得られたモデルが `best_model.npz` である.
-  `fold2`のテストデータを用いて学習済みモデルの精度を検証するためには、以下のように実行する:
+   The learned model using the dataset (`dataset/cross_validation/fold2`) is` best_model.npz`.
+   To verify the accuracy of the learned model using test data in `dataset/cross_validation/fold2`, run the following:
   
    ```sh
-  % cd <path/to/CoND>
-  % python run.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
-  ```
+   % cd <path/to/CoND>
+   % python run.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
+   ```
 
 
-3. tSNE
+3. Visualization of feature map by tSNE.
 
-  テストデータをすべて順伝搬した際の、input layer, convolution third layer, pooling third layer, fully-connected first layerにおける出力をtSNEによってvisualizationするコードを実行する:
+   Run code that visualizes the output in the input layer, third convolution layer, third pooling layer, first fully-connected layer with tSNE when all test data propagate forward.
 
-  ```sh
-  % cd <path/to/CoND>
-  % python tSNE.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
-  ```
+   ```sh
+   % cd <path/to/CoND>
+   % python tSNE.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
+   ```
 
 ## How to train
 
 Train code with dataset fold0 in cross validation.
 
 ```sh
-% python train.py --input dataset/cross_validation/fold0
+% python train.py --input dataset/cross_validation/fold0 --crop_size 200 --preprocess 1 --batchsize 2 --epoch 100 [--gpu gpu]
 ```
 
 The list of options will be displayed by adding `-h` option to the script.
