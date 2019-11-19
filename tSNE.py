@@ -215,7 +215,6 @@ for i in range(N_test):
     #         print('Predicted label is wrong.')
 
 
-os.makedirs('results', exist_ok=True)
 acts_conv3 = np.array(Activations_conv3)
 acts_pool3 = np.array(Activations_pool3)
 acts_fc1 = np.array(Activations_fc1)
