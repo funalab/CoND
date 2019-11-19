@@ -24,8 +24,6 @@ from sklearn.manifold import TSNE
 os.environ['QT_QPA_PLATFORM']='offscreen'
 plt.style.use('ggplot')
 
-starttime = time.time()
-
 p = argparse.ArgumentParser()
 p.add_argument('--input', '-i', default='dataset/cross_validation/fold2')
 p.add_argument('--model', '-m', default='best_model.npz')
@@ -34,6 +32,7 @@ p.add_argument('--label', '-y', type=int, default=-1)
 p.add_argument('--layer', '-l', default='conv3')
 args = p.parse_args()
 
+os.makedirs('results', exist_ok=True)
 imsize = 200
 
 # Load image

@@ -22,7 +22,6 @@ import collections
 os.environ['QT_QPA_PLATFORM']='offscreen'
 plt.style.use('ggplot')
 
-starttime = time.time()
 ap = argparse.ArgumentParser(description='python train.py')
 ap.add_argument('--input', '-i', nargs='?', default='dataset', help='Specify input directory')
 ap.add_argument('--gpu', '-g', type=int, default=-1, help='Specify GPU ID (negative value indicates CPU)')
@@ -32,7 +31,7 @@ ap.add_argument('--batchsize', '-b', type=int, default=2, help='Specify mini-bat
 ap.add_argument('--epoch', '-e', type=int, default=100, help='Specify the number of epoch')
 args = ap.parse_args()
 
-
+os.makedirs('results', exist_ok=True)
 batchsize = args.batchsize
 epoch_num = args.epoch
 imsize = 200
