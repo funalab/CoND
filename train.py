@@ -46,7 +46,6 @@ print('image size : ' + str(imsize))
 print('crop size  : ' + str(args.crop_size))
 print('pad size   : ' + str(pd_size))
 
-os.makedirs('results', exist_ok=True)
 
 # Load images
 def loadImages(path):

@@ -185,7 +185,6 @@ if args.gpu >= 0:
 
 tp, tn, fp, fn = 0, 0, 0, 0
 
-os.makedirs('results', exist_ok=True)
 with open('results/test.txt', 'w') as f:
     for i in range(N_test):
         print('Analyzing No.' + str(i) + ' image')
