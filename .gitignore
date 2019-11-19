@@ -1,0 +1,12 @@
+# MacOSX
+.DS_Store
+
+
+#Output
+results*
+models*
+dataset
+best_model.npz
+
+#Python
+*.pyc
