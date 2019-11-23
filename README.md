@@ -61,18 +61,18 @@ The operating environment can be constructed using virtualenv as follows.
 
 3. Visualization of feature map by tSNE.
 
-   Run code that visualizes the output in the input layer, third convolution layer, third pooling layer, first fully-connected layer with tSNE when all test data propagate forward.
+   Run a code which visualizes the output in the input layer, third convolution layer, third pooling layer, first fully-connected layer with tSNE when all test data are propagated forward.
 
    ```sh
    % python tSNE.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
    ```
 
-   We used [PredictMovingDirection](https://github.com/funalab/PredictMovingDirection) repository code for GBP and DTD feature analysis.
+   We used codes from our [PredictMovingDirection](https://github.com/funalab/PredictMovingDirection) repository for GBP and DTD feature analysis.
 
 
 ## How to train
 
-Train a model with dataset `dataset/cross_validation/fold0` and performing cross validation.
+Train a model with performing cross validation using dataset `dataset/cross_validation/fold0`.
 
 ```sh
 % python train.py --input dataset/cross_validation/fold0 --crop_size 200 --preprocess 1 --batchsize 2 --epoch 100 [--gpu gpu]
