@@ -12,7 +12,7 @@ Our Convolutional Neural Network (CNN)-based model distinguish the neuronal diff
 ## Installation
 
 ```sh
-% git clone https://gitlab.com/funalab/CoND.git
+% git clone https://github.com/funalab/CoND.git
 ```
 
 The code requires Python3 and the packages listed in `requirements.txt`.
