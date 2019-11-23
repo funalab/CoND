@@ -6,7 +6,7 @@ This project is carried out in cooperation with [Funahashi lab at Keio Universit
 
 ## Overview
 
-Our Convolutional Neural Network (CNN)-based model distinguish the neuronal differentiation and undifferentiation from the phase contrast microscopic image.
+Our Convolutional Neural Network (CNN)-based model distinguishes the neuronal differentiation and undifferentiation from the phase contrast microscopic images.
 
 
 ## Installation
