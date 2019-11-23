@@ -80,14 +80,14 @@ Train a model with dataset `dataset/cross_validation/fold0` and performing cross
 
 The list of options will be displayed by adding `-h` option to the script.
 
-    ```
+```
     --indir [INDIR], -i [INDIR]                  : Specify input files directory for learning data.
     --gpu GPU, -g GPU                            : Specify GPU ID (negative value indicates CPU).
     --crop_size CROP_SIZE, -c CROP_SIZE          : Specify one side voxel size of ROI.
     --preprocess PREPROCESS, -p PREPROCESS       : Specify pre-process mode; 1. median, 2. normalization
     --batchsize BATCHSIZE, -b BATCHSIZE          : Specify minibatch size.
     --epoch EPOCH, -e EPOCH                      : Specify the number of sweeps over the dataset to train.
-    ```
+```
 
 
 # Acknowledgement
