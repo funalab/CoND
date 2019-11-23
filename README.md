@@ -6,7 +6,7 @@ This project is carried out in cooperation with [Funahashi lab at Keio Universit
 
 ## Overview
 
-Our Convolutional Neural Network (CNN)-based model distinguish the neuronal differentiation and undifferentiation in the phase contrast microscopic image.
+Our Convolutional Neural Network (CNN)-based model distinguish the neuronal differentiation and undifferentiation from the phase contrast microscopic image.
 
 
 ## Installation
@@ -35,7 +35,7 @@ The operating environment can be constructed using virtualenv as follows.
         ```sh
         % cd <path/to/CoND>
         % wget -P https://fun.bio.keio.ac.jp/software/CoND/best_model.npz
-        % wget -P  https://fun.bio.keio.ac.jp/software/CoND/dataset.zip
+        % wget -P https://fun.bio.keio.ac.jp/software/CoND/dataset.zip
         % unzip dataset.zip
         ```
 
@@ -43,19 +43,18 @@ The operating environment can be constructed using virtualenv as follows.
 
         ```sh
         % cd <path/to/CoND>
-        % curl -o best_model.npz https://fun.bio.keio.ac.jp/software/CoND/best_model.npz
-        % curl -o dataset.zip https://fun.bio.keio.ac.jp/software/CoND/dataset.zip
+        % curl -O https://fun.bio.keio.ac.jp/software/CoND/best_model.npz
+        % curl -O https://fun.bio.keio.ac.jp/software/CoND/dataset.zip
         % unzip dataset.zip
         ```
 
 
-2. Inference for test dataset.
+2. Inference on test dataset.
 
    The learned model using the dataset (`dataset/cross_validation/fold2`) is` best_model.npz`.
    To verify the accuracy of the learned model using test data in `dataset/cross_validation/fold2`, run the following:
-  
+
    ```sh
-   % cd <path/to/CoND>
    % python run.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
    ```
 
@@ -65,7 +64,6 @@ The operating environment can be constructed using virtualenv as follows.
    Run code that visualizes the output in the input layer, third convolution layer, third pooling layer, first fully-connected layer with tSNE when all test data propagate forward.
 
    ```sh
-   % cd <path/to/CoND>
    % python tSNE.py --input dataset/cross_validation/fold2 --model best_model.npz [--gpu gpu]
    ```
 
@@ -74,10 +72,9 @@ The operating environment can be constructed using virtualenv as follows.
 
 ## How to train
 
-Train code with dataset `dataset/cross_validation/fold0` in cross validation.
+Train a model with dataset `dataset/cross_validation/fold0` and performing cross validation.
 
 ```sh
-% cd <path/to/CoND>
 % python train.py --input dataset/cross_validation/fold0 --crop_size 200 --preprocess 1 --batchsize 2 --epoch 100 [--gpu gpu]
 ```
 
