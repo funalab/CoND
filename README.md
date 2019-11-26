@@ -92,4 +92,4 @@ The list of options will be displayed by adding `-h` option to the script.
 
 # Acknowledgement
 
-The development of this algorithm was funded by a JSPS KAKENHI Grant (Number 16H04731).
+The development of this algorithm was funded by a JSPS KAKENHI Grants (Number 16H04731 and 19K22625).
